@@ -17,5 +17,13 @@
         "IP":"",
         "Port":"",
         "Password":""
+    },
+
+    "WhiteList": {
+        "addCommand":"",
+        "remCommand":"",
+        
+        "banCommand":"",
+        "unbanCommand":""
     }
 }
