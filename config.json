@@ -11,7 +11,7 @@
     "adminRole": "",
 
     "thumbImage": "https://media.discordapp.net/attachments/1057078822375264349/1066034808523866223/WoWqWgf5J4U.png",
-    "thumbText": "MineServ.top | WhiteList",
+    "footerText": "MineServ.top | WhiteList",
 
     "RCon": {
         "IP":"",
@@ -20,10 +20,10 @@
     },
 
     "WhiteList": {
-        "addCommand":"",
-        "remCommand":"",
-        
-        "banCommand":"",
-        "unbanCommand":""
+        "addCommand":"wl add $user",
+        "remCommand":"wl remove $user",
+
+        "banCommand":"ban $user",
+        "unbanCommand":"pardon $user"
     }
 }

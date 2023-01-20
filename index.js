@@ -7,7 +7,7 @@ const discordModals = require('discord-modals')
 discordModals(client)
 const Discord = require('discord.js')
 const config = require('./config.json')
-const comms = require("./comms.js")
+const comms = require("./cmds.js")
 client.discord = Discord
 client.config = config 
 var token = config.token
@@ -28,7 +28,7 @@ client.on('messageCreate', (msg) => {
       for (comm_count in comms.comms) {
         var comm2 = prefix + comms.comms[comm_count].name;
         if (comm2 == comm_name) {
-          comms.comms[comm_count].out(client, msg, messArr);
+          comms.comms[comm_count].out(client, msg);
         }
       }
     }
