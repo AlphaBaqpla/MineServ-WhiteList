@@ -50,7 +50,7 @@ module.exports = {
                 )
                 .setThumbnail(modal.user.avatarURL())
                 .setFooter({
-                    text: client.config.thumbText
+                    text: client.config.footerText
                 })
                 const adminRow = new MessageActionRow()
                 .addComponents(
@@ -73,7 +73,7 @@ module.exports = {
                 .setDescription('**Discord: <@'+modal.user.id+'> игровой ник: '+nickResponse+'**')
                 .setThumbnail(modal.user.avatarURL())
                 .setFooter({
-                    text: client.config.thumbText
+                    text: client.config.footerText
                 })
                 nicksChan.send({
                     embeds: [nickEmbed],
@@ -109,7 +109,7 @@ module.exports = {
                     )
                 .setThumbnail(client.config.thumbImage)
                 .setFooter({
-                    text: client.config.thumbText
+                    text: client.config.footerText
                 })
                 const remBtn = new MessageActionRow()
                 .addComponents(

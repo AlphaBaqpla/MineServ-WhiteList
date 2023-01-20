@@ -56,7 +56,7 @@ async function sendmsg(){
     .setThumbnail(client.config.thumbImage)
     .setFooter(
         {
-            text: client.config.thumbText
+            text: client.config.footerText
         })
         const row = new MessageActionRow()
         .addComponents(
