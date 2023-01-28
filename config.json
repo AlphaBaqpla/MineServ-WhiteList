@@ -1,6 +1,7 @@
 {
     "token": "",
     "prefix": "!",
+    "method":"RCon",
 
     "mainEmbedChannel": "",
 
@@ -17,6 +18,8 @@
         "IP":"",
         "Port":"",
         "Password":""
+    },
+    "LiteLoader":{
     },
 
     "WhiteList": {

@@ -1,33 +1,32 @@
 const conf = require('./config.json')
 const {MessageEmbed} = require('discord.js')
 const prefix = conf.prefix
+var t = 0
 //=====WhiteList====
 function wladd(r, msg){
   const arggs = msg.content.split(' ').slice(1)
   const nickname = arggs.join(' ')
   if (!nickname || !msg.member.permissions.has("ADMINISTRATOR")) return msg.channel.send({content: '**У вас нет прав на выполнение команды, либо вы допустили ошибку!**',})
   else{
-    msg.channel.send({
-      content: '**Игрок с ником "'+nickname+'" успешно добавлен в вайтлист!**',
-    })
-    const Rcon = require('rcon')
-    const o = {tcp:true,challenge:false}
-    const conn = new Rcon(conf.RCon.IP, conf.RCon.Port, conf.RCon.Password, o)
-    conn.on('auth', function(){
-      var cmd = conf.WhiteList.addCommand.replaceAll('$user',nickname)
-        console.log("Authenticated")
-        console.log("Sending command: "+cmd)
-        conn.send(cmd)
-    }).on('response', function(str){
-        console.log("Response: " + str)
-        conn.disconnect()
-    }).on('error', function(err){
-        console.log("Error: " + err)
-    }).on('end', function(){
-        console.log("Connection closed")
-    })
-    conn.connect()
-    console.info('Игрок "'+nickname+'" добавлен в вайтлист')
+    if(conf.method == "RCon"){
+      var cmd = conf.WhiteList.add.replaceAll('$user',nickname)
+      const method = require('./methods/RCon.js')
+      method.execute(cmd,conf,msg,t)
+      msg.channel.send({
+        content: '**Игрок с ником "'+nickname+'" успешно добавлен в вайтлист!**',
+      })
+      console.info('Игрок "'+nickname+'" добавлен в вайтлист')
+    }
+    else if(conf.method == "LiteLoader"){
+      msg.channel.send({
+        content: '**Игрок с ником "'+nickname+'" успешно добавлен в вайтлист!**',
+      })
+      var cmd = conf.WhiteList.add.replaceAll('$user',nickname)
+      const method = require('./methods/LiteLoader.js')
+      method.execute(cmd,conf,msg,t)
+      console.log("Running : "+cmd)
+      console.info('Игрок "'+nickname+'" добавлен в вайтлист')
+    }
   }
 }
 function wlrem(r, msg){
@@ -35,27 +34,24 @@ function wlrem(r, msg){
   const nickname = arggs.join(' ')
  if (!nickname || !msg.member.permissions.has("ADMINISTRATOR")) return msg.channel.send({content: '**У вас нет прав на выполнение команды, либо вы допустили ошибку!**',})
  else{
+  if(conf.method == "RCon"){
+    var cmd = conf.WhiteList.rem.replaceAll('$user',nickname)
+    const method = require('./methods/RCon.js')
+    method.execute(cmd,conf,msg,t)
+    console.info('Игрок "'+nickname+'" удалён из ВЛ')
     msg.channel.send({
       content: '**Игрок с ником "'+nickname+'" успешно удалён из вайтлиста!**',
     })
-    const Rcon = require('rcon')
-    const o = {tcp:true,challenge:false}
-    const conn = new Rcon(conf.RCon.IP, conf.RCon.Port, conf.RCon.Password, o)
-    conn.on('auth', function(){
-        var cmd = conf.WhiteList.remCommand.replaceAll('$user',nickname)
-        console.log("Authenticated")
-        console.log("Sending command: "+cmd)
-        conn.send(cmd)
-    }).on('response', function(str){
-        console.log("Response: " + str)
-        conn.disconnect()
-    }).on('error', function(err){
-        console.log("Error: " + err)
-    }).on('end', function(){
-        console.log("Connection closed")
+  }
+  else if(conf.method == "LiteLoader"){
+    var cmd = conf.WhiteList.rem.replaceAll('$user',nickname)
+    const method = require('./methods/LiteLoader.js')
+    method.execute(cmd,conf,msg,t)
+    msg.channel.send({
+      content: '**Игрок с ником "'+nickname+'" успешно удалён из вайтлиста!**',
     })
-    conn.connect()
     console.info('Игрок "'+nickname+'" удалён из ВЛ')
+  }
   }
 }
 //=====BANS====
@@ -64,27 +60,24 @@ function wlban(r, msg){
   const nickname = arggs.join(' ')
   if (!nickname || !msg.member.permissions.has("ADMINISTRATOR")) return msg.channel.send({content: '**У вас нет прав на выполнение команды, либо вы допустили ошибку!**',})
   else{
-    msg.channel.send({
-      content: '**Игрок с ником "'+nickname+'" успешно забанен!**',
-    })
-    const Rcon = require('rcon')
-    const o = {tcp:true,challenge:false}
-    const conn = new Rcon(conf.RCon.IP, conf.RCon.Port, conf.RCon.Password, o)
-    conn.on('auth', function(){
-        var cmd = conf.WhiteList.banCommand.replaceAll('$user',nickname)
-        console.log("Authenticated")
-        console.log("Sending command: "+cmd)
-        conn.send(cmd)
-    }).on('response', function(str){
-        console.log("Response: " + str)
-        conn.disconnect()
-    }).on('error', function(err){
-        console.log("Error: " + err)
-    }).on('end', function(){
-        console.log("Connection closed")
-    })
-    conn.connect()
-    console.info('Игрок "'+nickname+'" забанен нахуй!')
+    if(conf.method == "RCon"){
+      var cmd = conf.WhiteList.ban.replaceAll('$user',nickname)
+      const method = require('./methods/RCon.js')
+      method.execute(cmd,conf,msg,t)
+      msg.channel.send({
+        content: '**Игрок с ником "'+nickname+'" успешно забанен!**',
+      })
+      console.info('Игрок "'+nickname+'" забанен!')
+    }
+    else if(conf.method == "LiteLoader"){
+      var cmd = conf.WhiteList.ban.replaceAll('$user',nickname)
+      const method = require('./methods/LiteLoader.js')
+      method.execute(cmd,conf,msg,t)
+      msg.channel.send({
+        content: '**Игрок с ником "'+nickname+'" успешно забанен!**',
+      })
+      console.info('Игрок "'+nickname+'" забанен!')
+    }
   }
 }
 
@@ -93,27 +86,24 @@ function wlunban(r, msg){
   const nickname = arggs.join(' ')
  if (!nickname || !msg.member.permissions.has("ADMINISTRATOR")) return msg.channel.send({content: '**У вас нет прав на выполнение команды, либо вы допустили ошибку!**',})
  else{
+  if(conf.method == "RCon"){
+    var cmd = conf.WhiteList.unban.replaceAll('$user',nickname)
+    const method = require('./methods/RCon.js')
+    method.execute(cmd,conf,msg,t)
     msg.channel.send({
       content: '**Игрок с ником "'+nickname+'" успешно разбанен!**',
     })
-    const Rcon = require('rcon')
-    const o = {tcp:true,challenge:false}
-    const conn = new Rcon(conf.RCon.IP, conf.RCon.Port, conf.RCon.Password, o)
-    conn.on('auth', function(){
-        var cmd = conf.unbanCommand.replaceAll('$user',nickname)
-        console.log("Authenticated")
-        console.log("Sending command: "+cmd)
-        conn.send(cmd)
-    }).on('response', function(str){
-        console.log("Response: " + str)
-        conn.disconnect()
-    }).on('error', function(err){
-        console.log("Error: " + err)
-    }).on('end', function(){
-        console.log("Connection closed")
+    console.info('Игрок "'+nickname+'" разбенен!')
+  }
+  else if(conf.method == "LiteLoader"){
+    var cmd = conf.WhiteList.unban.replaceAll('$user',nickname)
+    const method = require('./methods/LiteLoader.js')
+    method.execute(cmd,conf,msg,t)
+    msg.channel.send({
+      content: '**Игрок с ником "'+nickname+'" успешно разбанен!**',
     })
-    conn.connect()
-    console.info('Игрок "'+nickname+'" разбенен нахуй!')
+    console.info('Игрок "'+nickname+'" разбенен!')
+  }
   }
 }
 
@@ -122,26 +112,18 @@ function wlcmd(r, msg){
   const cmd = arggs.join(' ')
   if (!cmd || !msg.member.permissions.has("ADMINISTRATOR")) return msg.channel.send({content: '**У вас нет прав на выполнение команды, либо вы допустили ошибку!**',})
  else{
+  if(conf.method == "RCon"){
+    const method = require('./methods/RCon.js')
+    method.execute(cmd,conf,msg,t)
     msg.channel.send({
       content: '**Команда "'+cmd+'" выполнена на сервере!**',
     })
     console.info('Команда "'+cmd+'" выполнена через дискорд!')
-    const Rcon = require('rcon')
-    const o = {tcp:true,challenge:false}
-    const conn = new Rcon(conf.RCon.IP, conf.RCon.Port, conf.RCon.Password, o)
-    conn.on('auth', function(){
-        console.log("Authenticated")
-        console.log("Sending command: "+cmd)
-        conn.send(cmd)
-    }).on('response', function(str){
-      msg.channel.send({content:'out:\n ```'+str+'```'})
-        conn.disconnect()
-    }).on('error', function(err){
-        console.log("Error: " + err)
-    }).on('end', function(){
-        console.log("Connection closed")
-    })
-    conn.connect()
+  }
+  else if(conf.method == "LiteLoader"){
+    const method = require('./methods/LiteLoader.js')
+    str = method.execute(cmd,conf,msg,'wlcmd')
+  }
   }
 }
 function wlhelp(r, msg){
